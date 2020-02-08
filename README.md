@@ -15,15 +15,11 @@ This project is licensed under [MIT License](/LICENSE)
 
 This project was a way for me to have all my infrastructure elements versionned on Github. The only requirements for reinstalling on a new machine are :
 *   Install Docker
-
 *   Configure as a swarm node
-
 *   Create a docker network named `reverse`
-
 *   Create 2 secret files :
-  * `/var/lib/secrets/acme_email` contains the email used for Let's Encrypt
-  * `/var/lib/secrets/gandi_v5` contains the gandi.net API key for DNSAUTH-01
-
+    *   `/var/lib/secrets/acme_email` contains the email used for Let's Encrypt
+    *   `/var/lib/secrets/gandi_v5` contains the gandi.net API key for DNSAUTH-01
 *   Install [my docker tools](https://github.com/ArwynFr/docker-tools) in `/opt/docker-tools-master` and grant execute rights
 
 The reason why the `reverse` network must be created externally to the stack, is that otherwise you can't modify the reverse stack while any other stack is using the network. The means you'd need to stop all services in order to update traefik or configuration.
