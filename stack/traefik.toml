@@ -18,7 +18,6 @@
 [providers]
   [providers.docker]
     swarmMode = true
-    lbswarm = true
     exposedByDefault = false    
   [providers.file]
     filename = "/etc/traefik/dynamic.toml"
