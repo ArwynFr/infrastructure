@@ -1,4 +1,5 @@
 [accessLog]
+  format = "json"
 
 [api]
   dashboard = true

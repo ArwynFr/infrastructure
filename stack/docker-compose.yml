@@ -46,6 +46,10 @@ services:
     environment:
       - GANDIV5_API_KEY_FILE=/run/secrets/gandi_v5
     image: traefik:cantal
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://seq.chezsquall.net:12201
     networks:
       - reverse
     ports:
