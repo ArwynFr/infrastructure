@@ -21,7 +21,7 @@ secrets:
     file: ${HOME}/.secrets/acme_email
 
 services:
-  reverse:
+  proxy:
     command: [ "--certificatesResolvers.gandi.acme.email=`cat /run/secrets/acme_email`" ]
     configs:
       - source: static
@@ -60,7 +60,7 @@ services:
       - target: 443
         published: 443
         protocol: tcp
-        mode: host # required to get client public ip rather than 
+        mode: host # required to get client public ip rather than bridge ip
     secrets:
       - gandi_v5
     volumes:
