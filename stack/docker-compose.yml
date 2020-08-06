@@ -16,9 +16,9 @@ networks:
 
 secrets:
   gandi_v5:
-    file: /var/lib/secrets/gandi_v5
+    file: ${HOME}/.secrets/gandi_v5
   acme_email:
-    file: /var/lib/secrets/acme_email
+    file: ${HOME}/.secrets/acme_email
 
 services:
   reverse:
