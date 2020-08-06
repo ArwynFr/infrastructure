@@ -53,8 +53,14 @@ services:
     networks:
       - reverse
     ports:
-      - 80:80
-      - 443:443
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host # required to get client public ip rather than bridge ip
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host # required to get client public ip rather than 
     secrets:
       - gandi_v5
     volumes:
