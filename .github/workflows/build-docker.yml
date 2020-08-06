@@ -28,4 +28,5 @@ jobs:
           echo "$DOCKER_KEY" > ~/.docker/key.pem
           echo "$GANDI_V5" > $HOME/.secrets/gandi_v5
           echo "$ACME_EMAIL" > $HOME/.secrets/acme_email
+          docker stack rm reverse
           docker stack deploy --prune --compose-file ./stack/docker-compose.yml reverse
