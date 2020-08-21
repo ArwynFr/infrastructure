@@ -1,0 +1,32 @@
+name: continous-deployment
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout source files
+        uses: actions/checkout@v1
+
+      - name: Create remote docker context
+        uses: arwynfr/actions-docker-context@master
+        with:
+          context_name: remote
+          docker_host: ${{ secrets.DOCKER_HOST }}
+          ssh_cert: ${{ secrets.SSH_CERT }}
+          ssh_key: ${{ secrets.SSH_KEY }}
+
+      - name: Deploy stack on the server
+        env:
+          ACME_EMAIL: ${{ secrets.ACME_EMAIL }}
+          GANDI_V5: ${{ secrets.GANDI_V5 }}
+        run: |
+          mkdir --parents $HOME/.secrets
+          echo "$ACME_EMAIL" > $HOME/.secrets/acme_email
+          echo "$GANDI_V5" > $HOME/.secrets/gandi_v5
+          docker --context remote stack rm reverse
+          docker --context remote stack deploy --prune --compose-file ./stack/docker-compose.yml --resolve-image changed reverse
