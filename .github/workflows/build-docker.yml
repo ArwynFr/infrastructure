@@ -12,21 +12,15 @@ jobs:
       - name: Checkout source files
         uses: actions/checkout@v1
 
-      - name: Deploy stack
-        env:
-          GANDI_V5: ${{ secrets.GANDI_V5 }}
-          ACME_EMAIL: ${{ secrets.ACME_EMAIL }}
-          DOCKER_CACERT: ${{ secrets.DOCKER_CACERT }}
-          DOCKER_CERT: ${{ secrets.DOCKER_CERT }}
-          DOCKER_KEY: ${{ secrets.DOCKER_KEY }}
-          DOCKER_HOST: ${{ secrets.DOCKER_HOST }}
-          DOCKER_TLS_VERIFY: 1
+      - name: Create remote docker context
+        uses: arwynfr/actions-docker-context@master
+        with:
+          context_name: remote
+          docker_host: ${{ secrets.DOCKER_HOST }}
+          ssh_cert: ${{ secrets.SSH_CERT }}
+          ssh_key: ${{ secrets.SSH_KEY }}
+
+      - name: Deploy stack on the server
         run: |
-          mkdir --parents ~/.docker $HOME/.secrets
-          echo "$DOCKER_CACERT" > ~/.docker/ca.pem
-          echo "$DOCKER_CERT" > ~/.docker/cert.pem
-          echo "$DOCKER_KEY" > ~/.docker/key.pem
-          echo "$GANDI_V5" > $HOME/.secrets/gandi_v5
-          echo "$ACME_EMAIL" > $HOME/.secrets/acme_email
-          docker stack rm reverse
-          docker stack deploy --prune --compose-file ./stack/docker-compose.yml reverse
+          docker --context remote stack rm reverse
+          docker --context remote stack deploy --prune --compose-file ./stack/docker-compose.yml --resolve-image changed reverse
